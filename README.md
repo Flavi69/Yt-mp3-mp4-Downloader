@@ -11,6 +11,4 @@ pip install pytube
 
 pip install moviepy
 
-pip install pydub
-
 Afterwards just run the .py file
