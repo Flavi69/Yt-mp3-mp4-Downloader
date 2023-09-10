@@ -1,4 +1,4 @@
-from PySide6.QtCore import QEvent, Qt, QObject, Signal
+from PySide6.QtCore import QEvent, QObject, Signal
 from PySide6.QtWidgets import (
     QApplication, QMessageBox, QWidget, QLabel, QPushButton, QVBoxLayout, QLineEdit, QProgressBar, QComboBox, QFileDialog
 )
@@ -7,14 +7,11 @@ from moviepy.editor import AudioFileClip
 import os
 import threading
 
-
 class DownloadCompletedEvent(QEvent):
     EVENT_TYPE = QEvent.registerEventType(QEvent.User)
 
-
 class EventReceiver(QObject):
     download_completed = Signal()
-
 
 def show_message_box(message):
     msg_box = QMessageBox()
@@ -25,7 +22,6 @@ app = QApplication([])
 
 window = QWidget()
 window.setWindowTitle("YouTube Downloader")
-
 
 link_input = QLineEdit()
 format_selector = QComboBox()
@@ -48,17 +44,13 @@ layout.addWidget(progress_bar)
 
 window.setLayout(layout)
 
-
 download_location = None
-
 
 def update_progress(stream, chunk, bytes_remaining):
     total_size = stream.filesize
     bytes_downloaded = total_size - bytes_remaining
     percentage = (bytes_downloaded / total_size) * 100
     progress_bar.setValue(percentage)
-# made by flavi08
-
 
 def download_video():
     global download_location  
@@ -79,20 +71,18 @@ def download_video():
         except Exception as e:
             show_message_box(f'An error occurred: {str(e)}')
 
-
-def choose_location_and_download(link):
+def choose_location_and_download():
     global download_location  
 
     options = QFileDialog.Options()
     options |= QFileDialog.ShowDirsOnly
     selected_directory = QFileDialog.getExistingDirectory(window, "Choose Download Location", options=options)
     if selected_directory:
-        download_location = selected_directory  # Set the download location
+        download_location = selected_directory  
         location_input.setText(selected_directory)
 
-# MP3
 def download_audio(link):
-    global download_location  l
+    global download_location
 
     if download_location:
         yt = YouTube(link, on_progress_callback=update_progress)
@@ -111,7 +101,6 @@ def download_audio_thread(stream, download_location):
 
     event_receiver.download_completed.emit()
 
-# MP4
 def download_mp4(link):
     global download_location  
 
